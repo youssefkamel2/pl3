@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ConsoleApplication3", "ConsoleApplication3\ConsoleApplication3.fsproj", "{4B61FA3B-AB6C-43F5-AB0E-34E506407073}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A712BB7-5361-407D-ACF4-FA7023B6D243}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\images\sss.jpg = ..\..\..\..\..\images\sss.jpg
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B61FA3B-AB6C-43F5-AB0E-34E506407073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B61FA3B-AB6C-43F5-AB0E-34E506407073}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B61FA3B-AB6C-43F5-AB0E-34E506407073}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B61FA3B-AB6C-43F5-AB0E-34E506407073}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0DAC67AD-BDF4-4C95-8340-B8CA3A94D89E}
+	EndGlobalSection
+EndGlobal

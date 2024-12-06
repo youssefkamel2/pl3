@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "FKTE1elT8JX0x4GQ1G/hbMdH6ctY2Kn3gO5KR5SgsnjD1G4frLLiDnaCrh9obMGl5y+skC/P49Zq6ZnFX5oMjA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\salem\\source\\repos\\ConsoleApplication3\\ConsoleApplication3\\ConsoleApplication3.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\salem\\.nuget\\packages\\fsharp.core\\8.0.200\\fsharp.core.8.0.200.nupkg.sha512"
+  ],
+  "logs": []
+}
