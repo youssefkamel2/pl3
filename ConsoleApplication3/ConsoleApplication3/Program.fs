@@ -58,8 +58,110 @@ let products =
         "Product50", ("Wireless Earbuds", 100.0, "True wireless earbuds with excellent sound quality.", "C:\\images\\sss.jpg")
     ] |> Map.ofList
 
+
+// Create a global cart (mutable List)
+let cart = new List<(string * float * string * string)>()
+
 // Create a cart panel for the cart page
 let cartPanel = new FlowLayoutPanel()
+
+// Function to calculate the total price in the cart
+let calculateTotalPrice () =
+    cart |> Seq.sumBy (fun (_, price, _, _) -> price)
+
+// Function to show the invoice page
+let showInvoicePage () =
+    let total = calculateTotalPrice()
+    MessageBox.Show(sprintf "Total price to pay: $%.2f" total, "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
+
+// Function to refresh the cart view
+let rec refreshCart () =
+    cartPanel.Controls.Clear()
+
+    cart
+    |> Seq.iteri (fun index (name, price, description, imagePath) ->
+        let card = new Panel()
+        card.Size <- Size(400, 180)
+        card.BorderStyle <- BorderStyle.FixedSingle
+        card.Margin <- Padding(10)
+
+        let pictureBox = new PictureBox()
+        pictureBox.Size <- Size(100, 100)
+        pictureBox.Location <- Point(10, 25)
+        pictureBox.BorderStyle <- BorderStyle.Fixed3D
+        try
+            pictureBox.Image <- Image.FromFile(imagePath)
+            pictureBox.SizeMode <- PictureBoxSizeMode.StretchImage
+        with
+        | :? System.IO.FileNotFoundException ->
+            pictureBox.Image <- null
+
+        let nameLabel = new Label()
+        nameLabel.Text <- name
+        nameLabel.Font <- new Font("Arial", 12.0f, FontStyle.Bold)
+        nameLabel.Location <- Point(120, 10)
+        nameLabel.AutoSize <- true
+
+        let priceLabel = new Label()
+        priceLabel.Text <- sprintf "Price: $%.2f" price
+        priceLabel.Location <- Point(120, 40)
+        priceLabel.AutoSize <- true
+
+        let descLabel = new Label()
+        descLabel.Text <- description
+        descLabel.Location <- Point(120, 70)
+        descLabel.Size <- Size(260, 50)
+        descLabel.AutoEllipsis <- true
+
+        let removeButton = new Button()
+        removeButton.Text <- "Remove"
+        removeButton.Size <- Size(100, 30)
+        removeButton.Location <- Point(120, 130)
+        removeButton.Click.Add(fun _ ->
+            cart.RemoveAt(index)
+            refreshCart())
+
+        card.Controls.Add(pictureBox)
+        card.Controls.Add(nameLabel)
+        card.Controls.Add(priceLabel)
+        card.Controls.Add(descLabel)
+        card.Controls.Add(removeButton)
+
+        cartPanel.Controls.Add(card))
+
+// Function to show the cart page
+let showCartPage () =
+    let cartForm = new Form(Text = "Your Cart", Size = Size(450, 500))
+    cartForm.StartPosition <- FormStartPosition.CenterScreen
+
+    cartPanel.Dock <- DockStyle.Fill
+    cartPanel.AutoScroll <- true
+
+    let bottomPanel = new Panel()
+    bottomPanel.Dock <- DockStyle.Bottom
+    bottomPanel.Height <- 60
+    bottomPanel.BackColor <- Color.LightGray
+
+    let invoiceButton = new Button()
+    invoiceButton.Text <- "Invoice"
+    invoiceButton.Size <- Size(100, 40)
+    invoiceButton.Location <- Point(10, 10)
+    invoiceButton.Click.Add(fun _ -> showInvoicePage())
+
+    let closeButton = new Button()
+    closeButton.Text <- "Close"
+    closeButton.Size <- Size(100, 40)
+    closeButton.Location <- Point(120, 10)
+    closeButton.Click.Add(fun _ -> cartForm.Close())
+
+    bottomPanel.Controls.Add(invoiceButton)
+    bottomPanel.Controls.Add(closeButton)
+
+    refreshCart()
+    cartForm.Controls.Add(cartPanel)
+    cartForm.Controls.Add(bottomPanel)
+
+    cartForm.ShowDialog() |> ignore
 
 // Function to create a product card
 let createProductCard (name: string, price: float, description: string, imagePath: string) =
@@ -100,16 +202,35 @@ let createProductCard (name: string, price: float, description: string, imagePat
     addToCartButton.Text <- "Add to Cart"
     addToCartButton.Size <- Size(100, 30)
     addToCartButton.Location <- Point(120, 130)
+    addToCartButton.Click.Add(fun _ ->
+        cart.Add((name, price, description, imagePath))
+        MessageBox.Show(sprintf "%s added to cart!" name, "Cart", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        |> ignore)
 
     card.Controls.Add(pictureBox)
     card.Controls.Add(nameLabel)
     card.Controls.Add(priceLabel)
     card.Controls.Add(descLabel)
+    card.Controls.Add(addToCartButton)
 
     card
 
 [<EntryPoint>]
 let main _ =
+    let form = new Form(Text = "Product Store", Size = Size(850, 600))
+
+    let cartButtonPanel = new Panel()
+    cartButtonPanel.Dock <- DockStyle.Top
+    cartButtonPanel.Height <- 60
+    cartButtonPanel.BackColor <- Color.LightGray
+
+    let cartButton = new Button()
+    cartButton.Text <- "View Cart"
+    cartButton.Size <- Size(100, 40)
+    cartButton.Location <- Point(10, 10)
+    cartButton.Click.Add(fun _ -> showCartPage())
+
+    cartButtonPanel.Controls.Add(cartButton)
 
     let flowPanel = new FlowLayoutPanel()
     flowPanel.Dock <- DockStyle.Fill
@@ -121,6 +242,7 @@ let main _ =
         flowPanel.Controls.Add(card))
 
     form.Controls.Add(flowPanel)
+    form.Controls.Add(cartButtonPanel)
 
     Application.Run(form)
     0
