@@ -3,7 +3,6 @@ open System.Collections.Generic
 open System.Drawing
 open System.Windows.Forms
 
-// Define the products map
 let products = 
     [
         "Product1", ("Laptop", 1200.0, "A powerful laptop for professionals.", "C:\\images\\sss.jpg")
@@ -59,22 +58,17 @@ let products =
     ] |> Map.ofList
 
 
-// Create a global cart (mutable List)
 let cart = new List<(string * float * string * string)>()
 
-// Create a cart panel for the cart page
 let cartPanel = new FlowLayoutPanel()
 
-// Function to calculate the total price in the cart
 let calculateTotalPrice () =
     cart |> Seq.sumBy (fun (_, price, _, _) -> price)
 
-// Function to show the invoice page
 let showInvoicePage () =
     let total = calculateTotalPrice()
     MessageBox.Show(sprintf "Total price to pay: $%.2f" total, "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
 
-// Function to refresh the cart view
 let rec refreshCart () =
     cartPanel.Controls.Clear()
 
@@ -129,7 +123,6 @@ let rec refreshCart () =
 
         cartPanel.Controls.Add(card))
 
-// Function to show the cart page
 let showCartPage () =
     let cartForm = new Form(Text = "Your Cart", Size = Size(450, 500))
     cartForm.StartPosition <- FormStartPosition.CenterScreen
@@ -163,7 +156,6 @@ let showCartPage () =
 
     cartForm.ShowDialog() |> ignore
 
-// Function to create a product card
 let createProductCard (name: string, price: float, description: string, imagePath: string) =
     let card = new Panel()
     card.Size <- Size(400, 180)
